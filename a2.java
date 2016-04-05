@@ -46,10 +46,9 @@ public class A2 {
         snake.put(87, 36);
         snake.put(93, 73);
         snake.put(95, 75);
-        snake.put(98, 79);
 
         players = num_players;      //Assigning Number of players given by users
-        rounds = 0;                 
+        rounds = 0;
         for (int i = 0; i < 4; i++) {
             players_score[i] = 0;       //setting up scores and wins to zero
             player_wins[i] = 0;
@@ -72,17 +71,15 @@ public class A2 {
                 rounds++;
                 if ((players_score[i] + random) < 100) {
                     players_score[i] += random;
-                    for (Map.Entry<Integer, Integer> entry : ladder.entrySet())
-                    {
+                    for (Map.Entry<Integer, Integer> entry : ladder.entrySet()) {
                         //Checking if ladder constraint is applicable
-                        if (players_score[i] == entry.getKey()) {   
+                        if (players_score[i] == entry.getKey()) {
                             players_score[i] = entry.getValue();
                             break;
 
                         }
                     }
-                    for (Map.Entry<Integer, Integer> entry : snake.entrySet())
-                    { 
+                    for (Map.Entry<Integer, Integer> entry : snake.entrySet()) {
                         //Checking if Snake constraints are applicable
                         if (players_score[i] == entry.getKey()) {
                             players_score[i] = entry.getValue();
@@ -93,11 +90,11 @@ public class A2 {
 
                 }
                 if (players_score[i] + random == 100) { //Win Point
-                    players_score[i] += random;         
+                    players_score[i] += random;
                     break;
                 }
                 player_turn[i] = false;
-                if (random == 6 && players_score[i]+random<=100) {
+                if (random == 6 && players_score[i] + random <= 100) {
                     i--;
                 }
             }
@@ -121,54 +118,80 @@ public class A2 {
     }
 
     public static void main(String[] args) {
-        for(int j=2;j<=4;j++)
-        {
-         long startTime = System.currentTimeMillis();
-        //creating an object of the game class with 4 players
-        System.out.println("Playing game with "+j+" Players.");
-        A2 player = new A2(j);
-        int roundss = 0;
-        int total_rounds = 0;
-        int max_round = 0;
-        int min_round = 10000;  
-        //calculating Average maximum and minimum number of rounds for 100 games
-        for (int i = 0; i < 100; i++) {
-            roundss = player.play();
-            total_rounds += roundss;
-            if (min_round > roundss) {
-                min_round = roundss;
-            }
-            if (roundss > max_round) {
-                max_round = roundss;
-            }
-        }
-        //Calculating winner of 100 games with most wins
-        int max_wins=0;
-        int winner=0;
-        for(int i=0;i<4;i++)
-        {
-            if(max_wins<player.player_wins[i])
-            {
-                max_wins=player.player_wins[i];
-                winner=i;
-            }
-        }
-        //printing out the results
-        System.out.println("Average Rounds: " + (int) (total_rounds / 100));
-        System.out.println("Minimum Rounds: " + (int) min_round);
-        System.out.println("Maximum Rounds: " + (int) max_round);
-        System.out.println("Winner is Player "+(winner+1) +" with Win Count = "+ (int) player.player_wins[winner]+" in 100 games");
-        System.out.println();
-        System.out.println("Memory Statistics for "+j+" players: ");
-        Runtime runtime = Runtime.getRuntime();
+        A2 playerr = new A2(2);
+        //Board Design
+        System.out.println("Welcome to Snake and Ladder Board Game!");
+        System.out.print("__________________________________________");
+        System.out.println("________________________________________");
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                System.out.print(playerr.table[row][col]);
+                for (Map.Entry<Integer, Integer> entry : playerr.ladder.entrySet()) {
+                    //Checking if ladder constraint is applicable
+                    if (playerr.table[row][col] == entry.getKey()) {
+                        System.out.print("-> " + entry.getValue());
+                        break;
+                    }
+                }
+                for (Map.Entry<Integer, Integer> entry : playerr.snake.entrySet()) {
+                    //Checking if ladder constraint is applicable
+                    if (playerr.table[row][col] == entry.getKey()) {
+                        System.out.print("-> " + entry.getValue());
+                        break;
+                    }
+                }
 
-        System.out.println("Allocated memory: " + runtime.totalMemory() / 1024); 
-        System.out.println("Used memory: " + runtime.freeMemory() / 1024); 
-        System.out.println("Computation Statistics for "+j+" players: ");
-        long endTime   = System.currentTimeMillis();
-        long totalTime = endTime - startTime;
-        System.out.println("Total Time taken: "+totalTime+"ms");
-        System.out.println("--------------------------------------------------------");
+                System.out.print("\t");
+            }
+            System.out.println("");
+        }
+        System.out.print("__________________________________________");
+        System.out.println("________________________________________");
+        System.out.println();
+        for (int j = 2; j <= 4; j++) {
+            long startTime = System.currentTimeMillis();
+            //creating an object of the game class with 4 players
+            System.out.println("Playing game with " + j + " Players.");
+            A2 player = new A2(j);
+            int roundss = 0;
+            int total_rounds = 0;
+            int max_round = 0;
+            int min_round = 10000;
+            //calculating Average maximum and minimum number of rounds for 100 games
+            for (int i = 0; i < 100; i++) {
+                roundss = player.play();
+                total_rounds += roundss;
+                if (min_round > roundss) {
+                    min_round = roundss;
+                }
+                if (roundss > max_round) {
+                    max_round = roundss;
+                }
+            }
+            //Calculating winner of 100 games with most wins
+            int max_wins = 0;
+            int winner = 0;
+            for (int i = 0; i < 4; i++) {
+                if (max_wins < player.player_wins[i]) {
+                    max_wins = player.player_wins[i];
+                    winner = i;
+                }
+            }
+            //printing out the results
+            System.out.println("Average Rounds: " + (int) (total_rounds / 100));
+            System.out.println("Minimum Rounds: " + (int) min_round);
+            System.out.println("Maximum Rounds: " + (int) max_round);
+            System.out.println("Winner is Player " + (winner + 1) + " with Win Count = " + (int) player.player_wins[winner] + " in 100 games");
+            System.out.println();
+            System.out.println("Memory and Computation Statistics for " + j + " players game: ");
+            Runtime runtime = Runtime.getRuntime();
+
+            System.out.println("Allocated memory: " + runtime.totalMemory() / 1024);
+            System.out.println("Used memory: " + runtime.freeMemory() / 1024);
+            long endTime = System.currentTimeMillis();
+            long totalTime = endTime - startTime;
+            System.out.println("Total Time taken: " + totalTime + "ms");
+            System.out.println("--------------------------------------------------------");
 
         }
     }
